@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:Arial,sans-serif;background:#f3f7fb;margin:0;color:#18324b}.wrap{max-width:900px;margin:25px auto;background:white;border-radius:18px;padding:28px;box-shadow:0 8px 30px #0001}
+h1{margin:0;font-size:25px;text-align:center;color:#0b4f8a}.sub{text-align:center;margin:8px 0 25px;color:#667}
+h2{font-size:18px;background:#eaf3fb;padding:10px 14px;border-radius:9px;margin-top:25px} .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-weight:600;font-size:13px}input,select{width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccd8e2;border-radius:8px;margin-top:5px}
+.full{grid-column:1/-1}.required{color:#c00}.btn{background:#0b66b2;color:white;border:0;padding:13px 24px;border-radius:9px;font-weight:bold;cursor:pointer}.center{text-align:center;margin-top:24px}
+.note{font-size:12px;color:#666}.success{display:none;text-align:center;background:#e9f8ee;padding:20px;border-radius:12px;margin-top:20px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><div class="wrap">
+<h1>KMCT COLLEGE OF ENGINEERING FOR EMERGING TECHNOLOGIES AND MANAGEMENT</h1>
+<div class="sub"><b>STUDENT ID CARD DATA COLLECTION</b> — Academic Year 2026–27</div>
+<form id="form">
+<h2>Student Details</h2><div class="grid">
+<div><label>Student Name <span class="required">*</span></label><input name="studentName" required></div>
+<div><label>Course <span class="required">*</span></label><select name="course" required><option value="">Select Course</option><option>B.Tech CSE</option><option>B.Tech ECE</option><option>B.Tech AI & DS</option><option>BCA</option><option>BBA</option><option>MBA</option></select></div>
+<div><label>Semester <span class="required">*</span></label><select name="semester" required><option value="">Select Semester</option><option>S1</option><option>S2</option><option>S3</option><option>S4</option><option>S5</option><option>S6</option><option>S7</option><option>S8</option></select></div>
+<div><label>Date of Birth</label><input type="date" name="dob"></div>
+<div><label>Gender</label><select name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div><label>Blood Group</label><select name="bloodGroup"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div><label>Student Mobile</label><input name="studentMobile" type="tel"></div>
+<div><label>Student Email</label><input name="studentEmail" type="email"></div>
+</div>
+<h2>Parent / Guardian Details</h2><div class="grid">
+<div><label>Parent / Guardian Name</label><input name="parentName"></div>
+<div><label>Parent Mobile</label><input name="parentMobile" type="tel"></div>
+<div><label>Emergency Contact</label><input name="emergencyContact" type="tel"></div>
+</div>
+<h2>Address</h2><div class="grid">
+<div><label>House Name / House Number</label><input name="house"></div><div><label>Place</label><input name="place"></div>
+<div><label>Post Office</label><input name="postOffice"></div><div><label>District</label><input name="district"></div>
+<div><label>PIN Code</label><input name="pin" inputmode="numeric"></div>
+</div>
+<h2>Photo & Signature</h2><div class="grid">
+<div><label>Student Photograph</label><input id="photo" type="file" accept="image/*"></div>
+<div><label>Student Signature</label><input id="signature" type="file" accept="image/*"></div>
+</div><p class="note">Please upload a clear recent photograph and signature.</p>
+<div class="center"><button class="btn" type="submit">SUBMIT DETAILS</button></div>
+</form><div id="success" class="success"></div>
+</div>
+<script>
+const fileData = f => new Promise((res,rej)=>{if(!f)return res(null);const r=new FileReader();r.onload=()=>res({data:r.result,mimeType:f.type});r.onerror=rej;r.readAsDataURL(f)});
+document.getElementById('form').onsubmit=async e=>{
+ e.preventDefault(); const btn=e.target.querySelector('button');btn.disabled=true;btn.textContent='Submitting...';
+ const o=Object.fromEntries(new FormData(e.target).entries());
+ o.photo=await fileData(document.getElementById('photo').files[0]);o.signature=await fileData(document.getElementById('signature').files[0]);
+ google.script.run.withSuccessHandler(r=>{e.target.style.display='none';const s=document.getElementById('success');s.style.display='block';s.innerHTML='<h2>Submission Successful</h2><p>Your details have been recorded.</p><h3>Submission ID: '+r.id+'</h3><p>Please keep this ID for future reference.</p>'}).withFailureHandler(err=>{alert(err.message||err);btn.disabled=false;btn.textContent='SUBMIT DETAILS'}).submitStudent(o);
+};
+</script></body></html>
 
