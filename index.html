@@ -1,13 +1,107 @@
-<!doctype html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
-body{font-family:Arial;margin:0;background:#f2f6fa;color:#17324a}.box{max-width:900px;margin:25px auto;background:#fff;padding:28px;border-radius:18px;box-shadow:0 8px 30px #0001}h1{text-align:center;color:#07579a;font-size:23px}.sub{text-align:center;font-weight:bold;margin-bottom:25px}.sec{background:#eaf3fb;padding:10px;margin:20px 0 12px;border-radius:8px;font-weight:bold}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-size:13px;font-weight:bold}input,select{width:100%;box-sizing:border-box;padding:11px;margin-top:5px;border:1px solid #ccd8e2;border-radius:8px}.full{grid-column:1/-1}.pay{display:flex;gap:20px;padding:12px;border:1px solid #ddd;border-radius:8px;margin-top:5px}.pay input{width:auto}.center{text-align:center;margin-top:25px}button{background:#0876c9;color:#fff;border:0;border-radius:8px;padding:13px 25px;font-weight:bold}.ok{display:none;text-align:center;background:#eefaf1;padding:25px;border-radius:10px}.sid{font-size:20px;font-weight:bold}@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.box{margin:0;border-radius:0;padding:18px}}</style></head><body><div class="box"><h1>KMCT COLLEGE OF ENGINEERING FOR EMERGING TECHNOLOGIES AND MANAGEMENT</h1><div class="sub">STUDENT ID CARD DATA COLLECTION — 2026–27</div><form id="f">
+
+<!doctype html>
+<html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;background:#f3f7fb;font-family:Arial;color:#17324a}.box{max-width:900px;margin:25px auto;background:white;padding:28px;border-radius:18px;box-shadow:0 8px 30px #0001}
+h1{text-align:center;color:#07579a;font-size:24px;line-height:1.35}.sub{text-align:center;font-weight:bold;margin-bottom:22px}
+.sec{background:#eaf3fb;border-left:5px solid #0876c9;padding:10px 14px;border-radius:8px;margin:20px 0 12px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-size:13px;font-weight:bold}
+input,select{width:100%;box-sizing:border-box;padding:11px;margin-top:5px;border:1px solid #ccd8e2;border-radius:8px}
+.pay{display:flex;gap:25px;border:1px solid #ddd;border-radius:8px;padding:12px}.pay input{width:auto}
+.center{text-align:center;margin-top:25px}.btn{background:#0876c9;color:white;border:0;border-radius:8px;padding:13px 25px;font-weight:bold;cursor:pointer}
+.office{text-align:center;margin-top:25px;padding-top:18px;border-top:1px solid #ddd}.office a{color:#07579a;font-weight:bold;text-decoration:none}
+.success{display:none;text-align:center;background:#eefaf1;padding:25px;border-radius:10px}.sid{font-size:20px;font-weight:bold}
+@media(max-width:650px){.box{margin:0;border-radius:0;padding:18px}.grid{grid-template-columns:1fr}}
+</style></head><body><div class="box">
+<h1>KMCT COLLEGE OF ENGINEERING FOR EMERGING TECHNOLOGIES AND MANAGEMENT</h1>
+<div class="sub">STUDENT ID CARD DATA COLLECTION — 2026–27</div>
+
+<form id="studentForm">
 <div class="sec">1. Student Details</div><div class="grid">
-<div><label>Student Name *</label><input name="studentName" required></div><div><label>Course *</label><select name="course" required><option value="">Select</option><option>B.Tech CSE1<option>B.Tech CSE2 </option><option>B.Tech ECE</option><option>B.Tech AI & DS</option><option>BCA</option><option>BBA</option><option>MBA</option></select></div>
-<div><label>Semester *</label><select name="semester" required><option value="">Select</option><option>S1</option><option>S3</select></div><div><label>Date of Birth</label><input name="dob" type="date"></div>
-<div><label>Gender</label><select name="gender"><option></option><option>Male</option><option>Female</option><option>Other</option></select></div><div><label>Blood Group</label><select name="bloodGroup"><option></option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
-<div><label>Student Mobile</label><input name="studentMobile" type="tel"></div><div><label>Student Email</label><input name="studentEmail" type="email"></div></div>
-<div class="sec">2. Parent / Guardian Details</div><div class="grid"><div><label>Parent / Guardian Name</label><input name="parentName"></div><div><label>Parent Mobile</label><input name="parentMobile"></div><div><label>Emergency Contact</label><input name="emergencyContact"></div></div>
-<div class="sec">3. Address</div><div class="grid"><div><label>House Name / House Number</label><input name="house"></div><div><label>Place</label><input name="place"></div><div><label>Post Office</label><input name="postOffice"></div><div><label>District</label><input name="district"></div><div><label>PIN Code</label><input name="pin"></div></div>
-<div class="sec">4. Photo & Signature</div><div class="grid"><div><label>Student Photograph</label><input id="photo" type="file" accept="image/*"></div><div><label>Student Signature</label><input id="sig" type="file" accept="image/*"></div></div>
-<div class="sec">5. Uniform / ID Card Payment</div><label>Payment Status *</label><div class="pay"><label><input type="radio" name="paymentStatus" value="Paid" required> Paid</label><label><input type="radio" name="paymentStatus" value="Not Paid"> Not Paid</label></div>
-<div class="center"><button id="b">SUBMIT DETAILS</button></div></form><div class="ok" id="ok"><h2>✓ Submitted Successfully</h2><p>Submission ID:</p><div class="sid" id="sid"></div><p>Keep this ID for reference.</p></div></div>
-<script>const rf=f=>new Promise((res,rej)=>{if(!f)return res(null);let r=new FileReader();r.onload=()=>res({data:r.result,mimeType:f.type});r.onerror=rej;r.readAsDataURL(f)});f.onsubmit=async e=>{e.preventDefault();b.disabled=true;b.textContent='Submitting...';let d=Object.fromEntries(new FormData(f));d.photo=await rf(photo.files[0]);d.signature=await rf(sig.files[0]);google.script.run.withSuccessHandler(x=>{sid.textContent=x.submissionId;f.style.display='none';ok.style.display='block'}).withFailureHandler(x=>{alert(x.message);b.disabled=false;b.textContent='SUBMIT DETAILS'}).submitStudent(d)}</script></body></html>
+<div><label>Student Name *</label><input name="studentName" required></div>
+<div><label>Course *</label><select name="course" required><option value="">Select</option><option>B.Tech CSE</option><option>B.Tech ECE</option><option>B.Tech AI & DS</option><option>BCA</option><option>BBA</option><option>MBA</option></select></div>
+<div><label>Semester *</label><select name="semester" required><option value="">Select</option><option>S1</option><option>S2</option><option>S3</option><option>S4</option><option>S5</option><option>S6</option><option>S7</option><option>S8</option></select></div>
+<div><label>Date of Birth</label><input name="dob" type="date"></div>
+<div><label>Gender</label><select name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div><label>Blood Group</label><select name="bloodGroup"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div><label>Student Mobile</label><input name="studentMobile" type="tel"></div>
+<div><label>Student Email</label><input name="studentEmail" type="email"></div>
+</div>
+
+<div class="sec">2. Parent / Guardian Details</div><div class="grid">
+<div><label>Parent / Guardian Name</label><input name="parentName"></div>
+<div><label>Parent Mobile</label><input name="parentMobile" type="tel"></div>
+<div><label>Emergency Contact</label><input name="emergencyContact" type="tel"></div>
+</div>
+
+<div class="sec">3. Address</div><div class="grid">
+<div><label>House Name / House Number</label><input name="house"></div>
+<div><label>Place</label><input name="place"></div>
+<div><label>Post Office</label><input name="postOffice"></div>
+<div><label>District</label><input name="district"></div>
+<div><label>PIN Code</label><input name="pin"></div>
+</div>
+
+<div class="sec">4. Photo & Signature</div><div class="grid">
+<div><label>Student Photograph</label><input id="photo" type="file" accept="image/*"></div>
+<div><label>Student Signature</label><input id="signature" type="file" accept="image/*"></div>
+</div>
+
+<div class="sec">5. Uniform / ID Card Payment</div>
+<label>Payment Status *</label>
+<div class="pay">
+<label><input type="radio" name="paymentStatus" value="Paid" required> Paid</label>
+<label><input type="radio" name="paymentStatus" value="Not Paid"> Not Paid</label>
+</div>
+
+<div class="center"><button class="btn" id="submitBtn" type="submit">SUBMIT DETAILS</button></div>
+</form>
+
+<div id="success" class="success"><h2>✓ Submitted Successfully</h2><p>Submission ID:</p><div class="sid" id="submissionId"></div><p>Keep this ID for reference.</p></div>
+
+<div class="office">
+Registration Office → <a id="officeLink" href="?page=office">OFFICE LOGIN</a>
+</div>
+</div>
+
+<script>
+const form=document.getElementById('studentForm');
+const submitBtn=document.getElementById('submitBtn');
+const readFile=file=>new Promise((resolve,reject)=>{
+ if(!file){resolve(null);return}
+ const reader=new FileReader();
+ reader.onload=()=>resolve({data:reader.result,mimeType:file.type});
+ reader.onerror=()=>reject(new Error('Could not read file.'));
+ reader.readAsDataURL(file);
+});
+
+form.addEventListener('submit',async function(e){
+ e.preventDefault();
+ submitBtn.disabled=true;
+ submitBtn.textContent='Submitting... Please wait';
+
+ try{
+   const d=Object.fromEntries(new FormData(form).entries());
+   d.photo=await readFile(document.getElementById('photo').files[0]);
+   d.signature=await readFile(document.getElementById('signature').files[0]);
+
+   google.script.run
+   .withSuccessHandler(function(r){
+      document.getElementById('submissionId').textContent=r.submissionId;
+      form.style.display='none';
+      document.getElementById('success').style.display='block';
+      window.scrollTo(0,0);
+   })
+   .withFailureHandler(function(err){
+      alert('ERROR: '+(err && err.message ? err.message : err));
+      submitBtn.disabled=false;
+      submitBtn.textContent='SUBMIT DETAILS';
+   })
+   .submitStudent(d);
+ }catch(err){
+   alert('ERROR: '+err.message);
+   submitBtn.disabled=false;
+   submitBtn.textContent='SUBMIT DETAILS';
+ }
+});
+</script></body></html>
