@@ -1,31 +1,90 @@
-<!doctype html>
-<html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1">
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KMCT Registration Office</title>
 <style>
-body{margin:0;background:#f3f7fb;font-family:Arial,sans-serif;color:#17324a}.box{max-width:1150px;margin:25px auto;background:#fff;padding:25px;border-radius:16px;box-shadow:0 8px 30px #0001}h1{text-align:center;color:#07579a;font-size:22px;line-height:1.4}.login{max-width:380px;margin:35px auto}.login input,.search{width:100%;box-sizing:border-box;padding:11px;margin:6px 0;border:1px solid #ccd8e2;border-radius:8px}.login button{width:100%}button{background:#0876c9;color:white;border:0;border-radius:8px;padding:11px 18px;font-weight:bold;cursor:pointer}.hidden{display:none}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#eef5fa;padding:15px;text-align:center;border-radius:9px}.stat b{display:block;font-size:24px}.toolbar{display:flex;gap:8px;margin:18px 0}.toolbar .search{flex:1;margin:0}.card{border:1px solid #dce4ea;border-radius:10px;padding:15px;margin:12px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid input{width:100%;padding:10px;box-sizing:border-box;border:1px solid #ccd8e2;border-radius:7px}.paid{color:green;font-weight:bold}.notpaid{color:#c00;font-weight:bold}.links{margin:10px 0}.links a{margin-right:15px;color:#07579a}.error{color:#b00020;margin:10px 0;font-weight:bold}.readonly{background:#f4f4f4}.small{font-size:12px;color:#667}.success{color:green}@media(max-width:700px){.box{margin:0;border-radius:0}.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.toolbar{flex-direction:column}}
-</style></head><body><div class="box">
-<h1>KMCT COLLEGE OF ENGINEERING FOR EMERGING TECHNOLOGIES AND MANAGEMENT<br>REGISTRATION OFFICE</h1>
-<div id="login" class="login"><h3>Registration Office Login</h3><p class="small">Enter the office credentials supplied by the administrator.</p><input id="username" autocomplete="username" placeholder="Username"><input id="password" type="password" autocomplete="current-password" placeholder="Password"><button id="loginBtn" onclick="login()">LOGIN</button><div id="loginError" class="error"></div><p id="connection" class="small"></p></div>
-<div id="dashboard" class="hidden">
-<div class="stats"><div class="stat">Total Students<b id="total">0</b></div><div class="stat">Paid<b id="paid">0</b></div><div class="stat">Not Paid<b id="notPaid">0</b></div><div class="stat">Completed<b id="completed">0</b></div></div>
-<div class="toolbar"><input class="search" id="query" placeholder="Search name / ID / course / mobile / admission / register no."><button onclick="searchStudents()">SEARCH</button><button onclick="allStudents()">ALL</button><button onclick="logout()">LOGOUT</button></div><div id="results"></div></div>
+body{font-family:Arial,sans-serif;background:#eef3f8;margin:0;color:#172033}
+.header{background:#123d70;color:#fff;padding:20px;text-align:center}
+.container{max-width:1150px;margin:25px auto;padding:20px}
+.card{background:#fff;padding:22px;border-radius:12px;box-shadow:0 4px 16px #0001;margin-bottom:20px}
+.login{max-width:430px;margin:50px auto}.login input{width:100%;box-sizing:border-box;padding:12px;margin:7px 0 15px;border:1px solid #ccd5e0;border-radius:7px}
+button{background:#123d70;color:#fff;border:0;padding:11px 18px;border-radius:7px;cursor:pointer;font-weight:bold}
+.logout{float:right;background:#8b1e1e}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:#fff;padding:18px;border-radius:10px;text-align:center}.stat b{display:block;font-size:28px;margin-top:5px}
+.search{display:flex;gap:10px}.search input{flex:1;padding:12px;border:1px solid #ccd5e0;border-radius:7px}
+table{width:100%;border-collapse:collapse;margin-top:15px;background:white}th,td{padding:9px;border-bottom:1px solid #e1e6ed;text-align:left;font-size:13px}th{background:#edf3fa}
+.small{font-size:12px;color:#667085}.readonly{font-weight:bold}
+#loginMsg,#officeMsg{margin-top:10px;padding:10px;border-radius:6px;display:none}.err{background:#fdeaea;color:#a11}.ok{background:#e7f7ed;color:#126b35}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.search{flex-direction:column}table{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="header"><h2>KMCT REGISTRATION OFFICE</h2><div>Student ID Card Management — 2026–27</div></div>
+<div id="loginView" class="container">
+<div class="card login">
+<h2>Office Login</h2>
+<label>Username</label><input id="username" autocomplete="username">
+<label>Password</label><input id="password" type="password" autocomplete="current-password">
+<button id="loginBtn" onclick="login()">LOGIN</button>
+<div id="loginMsg"></div>
+</div>
+</div>
+<div id="dashboard" class="container" style="display:none">
+<button class="logout" onclick="logout()">LOGOUT</button>
+<h2>Registration Office Dashboard</h2>
+<div class="stats">
+<div class="stat">Total Students<b id="total">0</b></div>
+<div class="stat">Paid<b id="paid">0</b></div>
+<div class="stat">Not Paid<b id="notPaid">0</b></div>
+<div class="stat">Completed<b id="completed">0</b></div>
+</div>
+<div class="card">
+<div class="search"><input id="q" placeholder="Search name, submission ID, course, mobile, admission no. or register no." onkeydown="if(event.key==='Enter')search()"><button onclick="search()">SEARCH</button></div>
+<div id="officeMsg"></div>
+<div id="results"></div>
+</div>
 </div>
 <script>
-var loggedIn=false;
-function unavailable(){return typeof google==='undefined'||!google.script||!google.script.run;}
+function msg(id,text,ok){const x=document.getElementById(id);x.style.display='block';x.className=ok?'ok':'err';x.textContent=text;}
 function login(){
-  var err=document.getElementById('loginError');err.textContent='';
-  if(unavailable()){err.textContent='ERROR: This page is not running inside Google Apps Script. Open the deployed Web App URL ending in /exec?page=office.';return;}
-  var u=document.getElementById('username').value.trim(),p=document.getElementById('password').value;
-  if(!u||!p){err.textContent='Please enter username and password.';return;}
-  var b=document.getElementById('loginBtn');b.disabled=true;b.textContent='CHECKING...';
-  google.script.run.withSuccessHandler(function(r){b.disabled=false;b.textContent='LOGIN';if(r&&r.success){loggedIn=true;document.getElementById('login').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');refresh();searchStudents();}else{err.textContent=(r&&r.message)||'Invalid username or password.';}}).withFailureHandler(function(e){b.disabled=false;b.textContent='LOGIN';err.textContent='Server error: '+(e&&e.message?e.message:e);}).officeLogin(u,p);
+ const u=document.getElementById('username').value.trim(),p=document.getElementById('password').value;
+ const b=document.getElementById('loginBtn');b.disabled=true;b.textContent='Checking...';
+ if(typeof google==='undefined'||!google.script||!google.script.run){msg('loginMsg','This Office page must be opened from the deployed Apps Script Web App URL.',false);b.disabled=false;b.textContent='LOGIN';return;}
+ google.script.run.withSuccessHandler(r=>{
+   if(r&&r.success){sessionStorage.setItem('kmctOffice','1');showDashboard();}
+   else msg('loginMsg','Invalid username or password.',false);
+   b.disabled=false;b.textContent='LOGIN';
+ }).withFailureHandler(e=>{msg('loginMsg','Login error: '+(e&&e.message?e.message:e),false);b.disabled=false;b.textContent='LOGIN';}).officeLogin(u,p);
 }
-function refresh(){google.script.run.withSuccessHandler(function(s){document.getElementById('total').textContent=s.total;document.getElementById('paid').textContent=s.paid;document.getElementById('notPaid').textContent=s.notPaid;document.getElementById('completed').textContent=s.completed;}).withFailureHandler(function(e){alert('ERROR: '+e.message);}).getOfficeStats();}
-function allStudents(){document.getElementById('query').value='';searchStudents();}
-function searchStudents(){if(!loggedIn)return;google.script.run.withSuccessHandler(render).withFailureHandler(function(e){alert('ERROR: '+e.message);}).searchStudents(document.getElementById('query').value);}
-function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];});}
-function render(a){var out=document.getElementById('results');if(!a||!a.length){out.innerHTML='<p>No records found.</p>';return;}out.innerHTML=a.map(function(x,i){var p=x.paymentStatus==='Paid'?'paid':'notpaid';return '<div class="card"><b>'+esc(x.studentName)+'</b> — '+esc(x.course)+' — '+esc(x.semester)+'<br><small>Submission ID: '+esc(x.id)+' | Mobile: '+esc(x.studentMobile)+' | Payment: <span class="'+p+'">'+esc(x.paymentStatus)+'</span></small><div class="grid" style="margin-top:10px"><input id="adm'+i+'" placeholder="Admission Number" value="'+esc(x.admission)+'"><input id="reg'+i+'" placeholder="University Register Number" value="'+esc(x.regno)+'"></div><div class="links">'+(x.photoUrl?'<a target="_blank" rel="noopener" href="'+esc(x.photoUrl)+'">View Photo</a>':'')+(x.signatureUrl?'<a target="_blank" rel="noopener" href="'+esc(x.signatureUrl)+'">View Signature</a>':'')+'</div><button onclick="saveRecord(\''+String(x.id).replace(/'/g,"\\'")+'\','+i+')">SAVE OFFICE DETAILS</button></div>';}).join('');}
-function saveRecord(id,i){google.script.run.withSuccessHandler(function(){alert('Saved successfully. Payment status was not changed.');refresh();searchStudents();}).withFailureHandler(function(e){alert('ERROR: '+e.message);}).updateOfficeRecord(id,document.getElementById('adm'+i).value,document.getElementById('reg'+i).value);}
-function logout(){location.href=location.pathname;}
-window.addEventListener('load',function(){if(unavailable()){document.getElementById('connection').textContent='Not connected to Apps Script. Use the deployed /exec?page=office URL.';}else{google.script.run.withSuccessHandler(function(){document.getElementById('connection').textContent='Connection OK.';}).withFailureHandler(function(){document.getElementById('connection').textContent='Apps Script connection failed.';}).ping();}document.getElementById('password').addEventListener('keydown',function(e){if(e.key==='Enter')login();});});
-</script></body></html>
+function showDashboard(){
+ document.getElementById('loginView').style.display='none';
+ document.getElementById('dashboard').style.display='block';
+ loadStats();search();
+}
+function logout(){sessionStorage.removeItem('kmctOffice');location.reload();}
+function loadStats(){google.script.run.withSuccessHandler(s=>{total.textContent=s.total;paid.textContent=s.paid;notPaid.textContent=s.notPaid;completed.textContent=s.completed;}).getOfficeStats();}
+function search(){
+ const q=document.getElementById('q').value;
+ google.script.run.withSuccessHandler(render).withFailureHandler(e=>msg('officeMsg','Search error: '+e.message,false)).searchStudents(q);
+}
+function render(rows){
+ const el=document.getElementById('results');
+ if(!rows.length){el.innerHTML='<p>No records found.</p>';return;}
+ let h='<table><tr><th>Submission ID</th><th>Student</th><th>Course</th><th>Mobile</th><th>Payment</th><th>Admission No.</th><th>University Reg. No.</th><th>Files</th><th>Action</th></tr>';
+ rows.forEach(r=>{
+ h+='<tr><td>'+esc(r.submissionId)+'</td><td>'+esc(r.studentName)+'</td><td>'+esc(r.course)+' / '+esc(r.semester)+'</td><td>'+esc(r.studentMobile)+'</td><td class="readonly">'+esc(r.paymentStatus)+'</td><td><input id="a_'+esc(r.submissionId)+'" value="'+esc(r.admissionNumber)+'"></td><td><input id="r_'+esc(r.submissionId)+'" value="'+esc(r.registerNumber)+'"></td><td>'+(r.photo?'<a target="_blank" href="'+r.photo+'">Photo</a> ':'')+(r.signature?'<a target="_blank" href="'+r.signature+'">Signature</a>':'')+'</td><td><button onclick="save(\''+js(r.submissionId)+'\')">SAVE</button></td></tr>';
+ });
+ h+='</table>';el.innerHTML=h;
+}
+function save(id){
+ const a=document.getElementById('a_'+id).value,r=document.getElementById('r_'+id).value;
+ google.script.run.withSuccessHandler(()=>{msg('officeMsg','Office details saved.',true);loadStats();search();}).withFailureHandler(e=>msg('officeMsg','Save error: '+e.message,false)).updateOfficeRecord(id,a,r);
+}
+function esc(x){return String(x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function js(x){return String(x||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+if(sessionStorage.getItem('kmctOffice')==='1')showDashboard();
+</script>
+</body>
+</html>
